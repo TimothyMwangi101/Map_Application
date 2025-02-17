@@ -20,26 +20,22 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
     </script>
     <title>Geolocation</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="./api.js"></script>
-
-    <script>
-        // navigator.geolocation.getCurrentPosition(
-        //     function(position){
-        //         let latitude = position.coords.latitude;
-        //         let longitude = position.coords.longitude;
-        //         let location = document.getElementById('location')
-        //         if (location) {
-        //             location.innerHTML += latitude + ' : ' + longitude
-        //         }
-        //         console.log(latitude + ':' + longitude)
-        //     }
-        // );
-    </script>
-    <script src="scripts.js" defer></script>
+    <script src="./api.js" defer></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <p id="location">Location: </p>
+    <div id="map"></div>
 </body>
+<script>
+    let map;
 
+    function initMap() {
+        const properties = {
+        center: { lat: 43.2387, lng: -79.8881 },
+        zoom: 12,
+        mapID: "TimMaps"
+        };
+        map  = new google.maps.Map(document.getElementById("map"), properties);
+    }
+</script>
 </html>
