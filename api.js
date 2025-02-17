@@ -10,3 +10,18 @@ const fetchAPIKEY = async () => {
         console.error("Fetch Error: " + error);
     }
 }
+const createAPIScriptTag = async (key) => {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${key}&loading=async&callback=initMap&libraries=marker`;
+        script.async = true;
+        script.onload = () => {
+            resolve();
+        };
+        script.addEventListener('error', () => {
+            reject(new Error("Couldnt append map script"))
+        });
+        document.head.appendChild(script);
+        console.log(script.src)
+    });
+}

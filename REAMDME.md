@@ -1,4 +1,4 @@
-#Map Application
+# Map Application
 
 A map app around Google Maps that can be used to find interesting places in Hamilton.
 
