@@ -5,8 +5,8 @@
 /**
  * Holds all functions needed to get the map API
  */
-window.addEventListener('load', () => {
-
+window.addEventListener('DOMContentLoaded', () => {
+    
     /**
      * Fetches the API key from API KEY.json
      * @see {@link https://github.com/TimothyMwangi101/Map_Application/blob/main/REAMDME.md}
@@ -41,15 +41,18 @@ window.addEventListener('load', () => {
                 reject(new Error("Couldnt append map script"))
             });
             document.head.appendChild(script);
-            console.log(script) //Debugging
+            //console.log(script) //Debugging
         });
     }
+    
     /**
      * Main method in this event listener. 
      */
     (async () => {
         try {
+            //🤡"'await' has no effect on the type of this expression" 🤡
             await createAPIScriptTag(await fetchAPIKEY());
+            
         }catch(error) {
             console.error("Error:" + error);
         }

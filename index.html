@@ -24,9 +24,17 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+    <h1 class="alert-info text-center">EV Charging Stations Location</h1>
     <div id="map"></div>
+    <div class="container-fluid"></div>
+    <footer class="bg-info-subtle text-center">
+        <p class="text-info-emphasis text-center">&copy; Contains public sector Data made available under the City of Hamilton’s Open Data Licence<br>
+        Source: <a href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">OpenHamilton</a>
+        </p> 
+        
+    </footer>
 </body>
-<script>
+<script id="mapScript">
     let map;
     
     /** 
@@ -41,5 +49,6 @@
         };
         map  = new google.maps.Map(document.getElementById("map"), properties);
     }
+
 </script>
 </html>
