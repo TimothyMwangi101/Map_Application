@@ -1,6 +1,41 @@
 /* Author: Timothy Mwangi - 000937691 */
+*{
+    font-size: medium;
+}
+
 #map {
-    height: 700px;
-    width: 1400px;
+    height: 70vh;
+    width: 90%;
+    max-width: 1300px;
     margin: 0 auto;
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+@media (max-width: 768px) {
+    #map {
+        height: 50vh;
+        width: 95%;
+    }
+}
+
+#infoWindow {
+    max-width: 300px; /* Adjust the width as needed */
+    font-family: 'Arial', sans-serif;
+}
+
+#infoWindow .card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+#infoWindow .card-text {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+#infoWindow .badge {
+    font-size: 0.8rem;
+    padding: 0.5em 0.75em;
 }

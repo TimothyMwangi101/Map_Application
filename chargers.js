@@ -292,5 +292,320 @@ const chargers = [
                 43.239401999058799
             ]
         }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 15,
+            "LOCATION_NAME": "City of Hamilton - Hutch's",
+            "LOT_NAME": null,
+            "EV_NETWORK": "FLO",
+            "ADDRESS": "280 Van Wagners Beach Rd",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 4,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.765222999999693,
+                43.258802999058702
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 16,
+            "LOCATION_NAME": "City of Hamilton - Lot 3",
+            "LOT_NAME": null,
+            "EV_NETWORK": "FLO",
+            "ADDRESS": "14 Mountain Ave. S",
+            "COMMUNITY": "Stoney Creek",
+            "TOTAL_CHARGING_PORTS": 4,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.756925999999595,
+                43.216030999058802
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 17,
+            "LOCATION_NAME": "CITYOFHAMILTON STATION 1",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "MACNAB at YORK",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.869369999999805,
+                43.259501999058699
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 18,
+            "LOCATION_NAME": "CITYOFHAMILTON STATION 2",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "83 MacNab St N",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.869699999999796,
+                43.259437999058697
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 19,
+            "LOCATION_NAME": "CITYOFHAMILTON STATION 3",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "28 York",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.869349999999798,
+                43.259089999058702
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 20,
+            "LOCATION_NAME": "CITYOFHAMILTON STATION 4",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "80 Main St W",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.872439999999798,
+                43.2564199990587
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 21,
+            "LOCATION_NAME": "CITYOFHAMILTON STATION 5",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "80 Main St W",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.872459999999805,
+                43.256335999058699
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 22,
+            "LOCATION_NAME": "CITYOFHAMILTON STATION 6",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "80 Main St W",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.872449999999802,
+                43.256442999058699
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 23,
+            "LOCATION_NAME": "CITYOFHAMILTON LOWER DECK RH",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "71 main west",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.873045999999803,
+                43.255446999058798
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 24,
+            "LOCATION_NAME": "CITYOFHAMILTON LOWER DECK LH",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "71 Main Street West",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.872899999999802,
+                43.254559999058699
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 25,
+            "LOCATION_NAME": "CITYOFHAMILTON HIGHER DECK",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "71 Main Street West",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.873337999999805,
+                43.255447999058802
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 26,
+            "LOCATION_NAME": "CITYOFHAMILTON 297 KING ST",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "293 King St E",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.860229999999802,
+                43.254123999058699
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 27,
+            "LOCATION_NAME": "CITYOFHAMILTON 1023 KING ST",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "1023 King St W",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.905669999999802,
+                43.261629999058698
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 28,
+            "LOCATION_NAME": "CITYOFHAMILTON 23 HATT ST",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "23 Hatt St",
+            "COMMUNITY": "Dundas",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.955379999999806,
+                43.265109999058701
+            ]
+        }
+    },
+    {
+        "type": "Feature",
+        "properties": {
+            "OBJECTID": 29,
+            "LOCATION_NAME": "CITYOFHAMILTON 171 MAIN ST",
+            "LOT_NAME": null,
+            "EV_NETWORK": "ChargePoint Network",
+            "ADDRESS": "171 Main St E",
+            "COMMUNITY": "Hamilton",
+            "TOTAL_CHARGING_PORTS": 2,
+            "STATUS": "Online",
+            "HOURS": "24 hours daily"
+        },
+        "geometry": {
+            "type": "Point",
+            "coordinates": [
+                -79.862839999999807,
+                43.253849999058801
+            ]
+        }
     }
 ]

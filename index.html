@@ -24,10 +24,20 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 
-<body>
+<body class="container-fluid">
     <h1 class="alert-info text-center">EV Charging Stations Location</h1>
     <div id="map"></div>
-    <span id="details" style="font-size: 24px;"></span>
+    <span id="details"></span>
+    <div id="filters">
+        <h3>Apply some filters to narrow your search</h3>
+        <button type="button" id="online">Online only</button>
+        <button type="button" id="24Hrs">24 Hours</button>
+        <button type="button" id="hamilton">Hamilton</button>
+        <button type="button" id="flo">Network: FLO</button>
+        <button type="button" id="all">Display All</button>
+        <span id="appliedFilter"></span>
+    </div>
+    
 
     <footer class="bg-info-subtle text-center">
         <p class="text-info-emphasis text-center">&copy; Contains public sector Data made available under the City of
@@ -38,8 +48,8 @@
     </footer>
 
     <script>
-
         let map;
+        let markers = [];
 
         function initMap() {
             // Create a Google Map centered on Mohawk College fennell campus
@@ -48,13 +58,6 @@
                 zoom: 13,
                 mapId: "5e6d3a99f6c7156c"
             });
-            // let infoWindow;
-            // const marker_clicked = function() {
-            //     infoWindow.close();
-            //     infoWindow.setContent();
-            // }
-
-            // let iconSrc, location, network, lotName, address, ports, status, hours, community;
 
             for (let i = 0; i < chargers.length; i++) {
                 let position = { lat: 0, lng: 0 };
@@ -77,19 +80,21 @@
                     iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon15.png";
                 }
 
-                let icon = document.createElement('img');
+                const icon = document.createElement('img');
                 icon.src = iconSrc;
 
                 const content = document.createElement('div');
                 content.innerHTML = `
-                     <div id="infoWindow">
-                        <h3>${location}: ${lotName}</h3>
-                        <p><strong>${status}</strong></p>
-                        <p>Address: ${address}</p>
-                        <p>Community: ${community}</p>
-                        <p>Ev_Network: ${network}</p>
-                        <p>No. Charging ports: ${ports}</p>
-                        <p>Hours: ${hours}</p>
+                    <div id="infoWindow" class="card shadow-md p-2 mb-4 bg-white rounded">
+                        <div class="card-body">
+                            <h3 class="card-title">${location}: ${lotName}</h3>
+                            <p class="card-text"><strong class="badge bg-primary">${status}</strong></p>
+                            <p class="card-text"><strong>Address:</strong> ${address}</p>
+                            <p class="card-text"><strong>Community:</strong> ${community}</p>
+                            <p class="card-text"><strong>Ev Network:</strong> ${network}</p>
+                            <p class="card-text"><strong>No. Charging Ports:</strong> ${ports}</p>
+                            <p class="card-text"><strong>Hours:</strong> ${hours}</p>
+                        </div>
                     </div>
                 `;
 
@@ -103,16 +108,71 @@
                     content: content
                 });
                 marker.addListener('click', () => {
-                    infoWindow.close();
                     infoWindow.open({
                         anchor: marker,
                         shouldFocus: false
                     });
-                    document.getElementById("details").innerHTML = content;
                 });
-            }
 
+                marker.STATUS = chargers[i].properties.STATUS;
+                marker.COMMUNITY = chargers[i].properties.COMMUNITY;
+                marker.NETWORK = chargers[i].properties.EV_NETWORK;
+                marker.HOURS = chargers[i].properties.HOURS;
+
+
+                markers.push(marker);
+            }
         }
+        function filterOnline() {
+            for (let i = 0; i < markers.length; i++) {
+                const status = markers[i].STATUS;
+                if (status === "Offline") {
+                    markers[i].position = null;
+                }  
+            }
+            document.getElementById('appliedFilter').textContent += "Online only Filter Active |";
+        }
+        function filter24hrs() {
+            for (let i = 0; i < markers.length; i++) {
+                const hours = markers[i].HOURS;
+                if (hours !== "24 hours daily") 
+                    markers[i].position = null; 
+            }
+            
+            document.getElementById('appliedFilter').innerText += "24 Hour Filter Active |";
+        }
+        function filterHamiltonOnly() {
+            for (let i = 0; i < markers.length; i++) {
+                const location = markers[i].COMMUNITY;
+                if (location !== "Hamilton") 
+                    markers[i].position = null;
+            }
+            document.getElementById('appliedFilter').innerText += "Hamilton Filter Active |";
+        }
+        function filterNetworkFLO() {
+            for (let i = 0; i < markers.length; i++) {
+                const network = markers[i].NETWORK;
+                if (network !== "FLO") 
+                    markers[i].position = null;
+            }
+            document.getElementById('appliedFilter').innerText += "FLO Filter Active |";
+        }
+        function displayALL() {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].position = {
+                    lat: chargers[i].geometry.coordinates[1],
+                    lng: chargers[i].geometry.coordinates[0]
+                }
+            }
+            document.getElementById('appliedFilter').innerText = "No Filters";
+        }
+        document.getElementById('online').addEventListener("click", filterOnline);
+        document.getElementById('hamilton').addEventListener('click', filterHamiltonOnly);
+        document.getElementById('24Hrs').addEventListener('click', filter24hrs);
+        document.getElementById('flo').addEventListener('click', filterNetworkFLO);
+        document.getElementById('all').addEventListener('click', displayALL);
+
+
     </script>
 </body>
 
