@@ -22,6 +22,7 @@ window.addEventListener('DOMContentLoaded', () => {
             return json.key;
         } catch (error) {
             console.error("Fetch Error: " + error);
+            return;
         }
     }
     /**
@@ -55,6 +56,7 @@ window.addEventListener('DOMContentLoaded', () => {
             
         }catch(error) {
             console.error("Error:" + error);
+            return;
         }
     })();
 });
