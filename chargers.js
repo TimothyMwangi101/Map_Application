@@ -1,4 +1,4 @@
-[
+const chargers = [
     {
         "type": "Feature",
         "properties": {

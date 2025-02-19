@@ -19,8 +19,6 @@
     </script>
     <title>Geolocation</title>
     <script src="./api.js"></script>
-    <!-- <script type="module" src="./chargers.js"></script> -->
-    <!-- <script type="module" src="charger.js"></script> -->
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -33,68 +31,18 @@
         Source: <a href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">OpenHamilton</a>
         </p> 
     </footer>
+    <script src="./chargers.js"></script>   
     <script>
 
-        let map, mohawk_marker;
+        let map, marker;
 
         function initMap() {
-        // the latitude and longitude of mohawk college fennell campus
-            let mohawkloc = { lat: 43.2387, lng: -79.8881 };
-
             // Create a Google Map centered on Mohawk College fennell campus
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 43.2387, lng: -79.8881 },
                 zoom: 13,
-                mapId: "MapTim"
+                mapId: "5e6d3a99f6c7156c"
             });
-            
-            // create a marker centered on Mohawk College fennell campus
-            mohawk_marker = new google.maps.marker.AdvancedMarkerElement({
-                map: map,
-                position: mohawkloc,
-                title: "Mohawk College",  // will appear when we hover over the marker
-            });
-            
-        }
-    // function displayChargerInfo() {
-    //     let position = {lat: 0, lng: 0};
-    //     let iconSrc, location, network, lotName, address, ports, status, hours, community;
-        
-    
-    //     for (let i = 0; i < chargers.length; i++) {
-
-    //         position.lat = chargers[i].geometry.coordinates[0];
-    //         position.lng = chargers[i].geometry.coordinates[1];
-    //         location = chargers[i].properties.LOCATION_NAME;
-    //         lotName = chargers[i].properties.LOT_NAME;
-    //         network = chargers[i].properties.EV_NETWORK;
-    //         address = chargers[i].properties.ADDRESS;
-    //         location = chargers[i].properties.LOCATION_NAME;
-    //         ports = chargers[i].properties.TOTAL_CHARGING_PORTS;
-    //         hours = chargers[i].properties.HOURS;
-    //         community = chargers[i].properties.COMMUNITY;
-    //         status = chargers[i].properties.STATUS;
-
-    //         if (status === "Online") {
-    //             iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
-    //         } else  
-    //             iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon15.png";
-
-    //     }
-    //     return [position, iconSrc, location, network, lotName, address, ports, status, hours, community];
-    // }
-    // console.log(displayChargerInfo())
-    
-    
-    </script>
-    <script type="module">
-        import { runChargerScript } from "./charger.js";
-
-        try {
-            let x = await runChargerScript();
-            console.log(x);
-        } catch (error) {
-            console.error(error);
         }
     </script>
 </body>
