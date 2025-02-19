@@ -43,6 +43,47 @@
                 zoom: 13,
                 mapId: "5e6d3a99f6c7156c"
             });
+            let infoWindow = new google.maps.InfoWindow();
+            // let iconSrc, location, network, lotName, address, ports, status, hours, community;
+            
+            for (let i = 0; i < chargers.length; i++) {
+                let position = { lat: 0, lng: 0 }; 
+
+                position.lat = chargers[i].geometry.coordinates[1]; 
+                position.lng = chargers[i].geometry.coordinates[0]; 
+                let location = chargers[i].properties.LOCATION_NAME;
+                let lotName = chargers[i].properties.LOT_NAME;
+                let network = chargers[i].properties.EV_NETWORK;
+                let address = chargers[i].properties.ADDRESS;
+                let ports = chargers[i].properties.TOTAL_CHARGING_PORTS;
+                let hours = chargers[i].properties.HOURS;
+                let community = chargers[i].properties.COMMUNITY;
+                let status = chargers[i].properties.STATUS;
+                let iconSrc;
+
+                if (status === "Online") {
+                    iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
+                } else {
+                    iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon15.png";
+                }
+
+                let icon = document.createElement('img').src = iconSrc;
+                // icon.src = iconSrc;
+
+                const content = document.createElement('div'); 
+                content.innerHTML = `
+                    <div style="background-color: white; padding: 5px; border-radius: 5px;">
+                        <strong>${location}</strong><br>
+                    </div>
+                `;
+
+                marker = new google.maps.marker.AdvancedMarkerElement({
+                    map: map,
+                    position: position,
+                    title: location
+                    // content: content 
+                });
+            }
         }
     </script>
 </body>
