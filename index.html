@@ -28,17 +28,73 @@
     <h1 class="alert-info text-center">EV Charging Stations Location</h1>
     <div id="map"></div>
     <span id="details"></span>
-    <div id="filters">
-        <h3>Apply some filters to narrow your search</h3>
-        <button type="button" id="online">Online only</button>
-        <button type="button" id="24Hrs">24 Hours</button>
-        <button type="button" id="hamilton">Hamilton</button>
-        <button type="button" id="flo">Network: FLO</button>
-        <button type="button" id="all">Display All</button>
-        <span id="appliedFilter"></span>
+    <div id="filters" class="mb-4 p-3 border rounded bg-light">
+        <h3 class="h5 mb-3">Apply some filters to narrow your search</h3>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="button" id="online" class="btn btn-outline-primary btn-sm">Online only</button>
+            <button type="button" id="24Hrs" class="btn btn-outline-primary btn-sm">24 Hours</button>
+            <button type="button" id="hamilton" class="btn btn-outline-primary btn-sm">Hamilton</button>
+            <button type="button" id="flo" class="btn btn-outline-primary btn-sm">Network: FLO</button>
+            <button type="button" id="all" class="btn btn-outline-primary btn-sm">Display All</button>
+        </div>
+        <span id="appliedFilter" class="badge bg-secondary"></span>
     </div>
-    <button type="button" id="userLocation">Geolocate</button>
+    <button type="button" id="userLocation" class="btn btn-outline-success btn-sm">Geolocate</button>
+
+    <form class="mb-3 p-4 border rounded bg-light container-fluid" id="addAddress" autocomplete="on">
+        <h3 class="text-center fw-bolder">Add an Address</h3>
+        <fieldset class="mb-4">
+            <legend class="fw-bold fs-5">Location</legend>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <input type="text" name="locations" id="address" class="form-control" required placeholder="28 York Blvd">
+            </div>
     
+            <div class="mb-3">
+                <label for="community" class="form-label">Select the community:</label>
+                <select name="location" id="community" class="form-select">
+                    <option selected value="Hamilton">Hamilton</option>
+                    <option value="Dundas">Dundas</option>
+                    <option value="Ancaster">Ancaster</option>
+                    <option value="Stoney Creek">Stoney Creek</option>
+                    <option value="Grimsby">Grimsby</option>
+                </select>
+            </div>
+    
+            <div class="mb-3">
+                <label for="lot" class="form-label">Lot Name:</label>
+                <input type="text" name="location" id="lot" class="form-control" placeholder="7DU, 5">
+            </div>
+        </fieldset>
+    
+        <fieldset class="mb-4">
+            <legend class="fw-bold fs-5">Status:</legend>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="radio" name="status" id="statusON" checked class="form-check-input">
+                    <label for="statusON" class="form-check-label">Online</label>
+                </div>
+                <div class="form-check">
+                    <input type="radio" name="status" id="statusOff" class="form-check-input">
+                    <label for="statusOff" class="form-check-label">Offline</label>
+                </div>
+            </div>
+    
+            <div class="mb-3">
+                <label for="time" class="form-label">Select (closest) time:</label>
+                <select name="time" id="time" class="form-select">
+                    <option value="9-6" selected>9 AM - 6 PM</option>
+                    <option value="24">24 hours</option>
+                    <option value="9-2">9 AM - 2 AM</option>
+                    <option value="9-9">9 AM - 9 PM</option>
+                </select>
+            </div>
+        </fieldset>
+    
+        <div class="d-grid">
+            <input type="submit" value="Submit" class="btn btn-outline-primary">
+        </div>
+    </form>    
 
     <footer class="bg-info-subtle text-center">
         <p class="text-info-emphasis text-center">&copy; Contains public sector Data made available under the City of
@@ -140,7 +196,7 @@
                     markers[i].position = null; 
             }
             
-            document.getElementById('appliedFilter').innerText += "24 Hour Filter Active |";
+            document.getElementById('appliedFilter').innerText += "24 Hour Filter Active";
         }
         function filterHamiltonOnly() {
             for (let i = 0; i < markers.length; i++) {
@@ -148,7 +204,7 @@
                 if (location !== "Hamilton") 
                     markers[i].position = null;
             }
-            document.getElementById('appliedFilter').innerText += "Hamilton Filter Active |";
+            document.getElementById('appliedFilter').innerText += "Hamilton Filter Active";
         }
         function filterNetworkFLO() {
             for (let i = 0; i < markers.length; i++) {
@@ -156,7 +212,7 @@
                 if (network !== "FLO") 
                     markers[i].position = null;
             }
-            document.getElementById('appliedFilter').innerText += "FLO Filter Active |";
+            document.getElementById('appliedFilter').innerText += "FLO Filter Active";
         }
         function displayALL() {
             for (let i = 0; i < markers.length; i++) {
@@ -189,9 +245,14 @@
                 content: icon
             });
         }
+        //Calls locate user func and passes a position obj
         document.getElementById('userLocation').addEventListener("click", function() {
             navigator.geolocation.getCurrentPosition(locateUser);
         });
+
+        
+
+
     </script>
 </body>
 
