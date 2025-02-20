@@ -1,3 +1,11 @@
+
+function appendBadge(text) {
+    const span = document.createElement('span');
+    span.className = "badge bg-secondary";
+    span.innerHTML += text;
+    document.getElementById('appliedFilter').appendChild(span);
+}
+
 function filterOnline() {
     for (let i = 0; i < markers.length; i++) {
         const status = markers[i].STATUS;
@@ -5,7 +13,7 @@ function filterOnline() {
             markers[i].position = null;
         }  
     }
-    document.getElementById('appliedFilter').textContent += "Online only Filter Active |";
+    appendBadge("Filter: Online");  
 }
 function filter24hrs() {
     for (let i = 0; i < markers.length; i++) {
@@ -13,8 +21,7 @@ function filter24hrs() {
         if (hours !== "24 hours daily") 
             markers[i].position = null; 
     }
-    
-    document.getElementById('appliedFilter').innerText += "24 Hour Filter Active";
+    appendBadge("Filter: 24hrs");
 }
 function filterHamiltonOnly() {
     for (let i = 0; i < markers.length; i++) {
@@ -22,7 +29,7 @@ function filterHamiltonOnly() {
         if (location !== "Hamilton") 
             markers[i].position = null;
     }
-    document.getElementById('appliedFilter').innerText += "Hamilton Filter Active";
+    appendBadge("Filter: Hamilton");
 }
 function filterNetworkFLO() {
     for (let i = 0; i < markers.length; i++) {
@@ -30,26 +37,20 @@ function filterNetworkFLO() {
         if (network !== "FLO") 
             markers[i].position = null;
     }
-    document.getElementById('appliedFilter').innerText += "FLO Filter Active";
+    appendBadge("Filer: FLO");
 }
 function displayALL() {
+    document.getElementById('appliedFilter').innerHTML = "";
     for (let i = 0; i < markers.length; i++) {
         markers[i].position = {
             lat: chargers[i].geometry.coordinates[1],
             lng: chargers[i].geometry.coordinates[0]
         }
     }
-    document.getElementById('appliedFilter').innerText = "No Filters";
+    appendBadge("Filer: Display");
 }
 function displayPorts() {
     const ports = document.getElementById('ports');
     document.getElementById('portsValue').innerText = ports.value;
 }   
 
-//Adding onclicks
-document.getElementById('online').addEventListener("click", filterOnline);
-document.getElementById('hamilton').addEventListener('click', filterHamiltonOnly);
-document.getElementById('24Hrs').addEventListener('click', filter24hrs);
-document.getElementById('flo').addEventListener('click', filterNetworkFLO);
-document.getElementById('all').addEventListener('click', displayALL);
-document.getElementById('ports').addEventListener('click', displayPorts);
