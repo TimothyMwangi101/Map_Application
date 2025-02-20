@@ -71,3 +71,8 @@
 #addAddress .btn {
     margin-top: 1rem; 
 }
+/* Style the range input container */
+#ports {
+    width: 100%; 
+    margin: 10px 0; 
+}

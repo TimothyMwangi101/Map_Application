@@ -19,8 +19,10 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
         </script>
     <title>Geolocation</title>
-    <script src="./api.js"></script>
-    <script src="./chargers.js"></script>
+    <script src="./api.js" async></script>
+    <script src="./chargers.js" async></script>
+    <script src="./form.js" async></script>
+
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -39,12 +41,21 @@
         </div>
         <span id="appliedFilter" class="badge bg-secondary"></span>
     </div>
-    <button type="button" id="userLocation" class="btn btn-outline-success btn-sm">Geolocate</button>
 
-    <form class="mb-3 p-4 border rounded bg-light container-fluid" id="addAddress" autocomplete="on">
+    <div id="directions" class="mb-3 p-4 border rounded bg-light container-fluid">
+        <button type="button" id="userLocation" class="btn btn-outline-success btn-sm">Geolocate</button>
+        
+    </div>
+
+    <div class="mb-3 p-4 border rounded bg-light container-fluid" id="addAddress" autocomplete="on">
         <h3 class="text-center fw-bolder">Add an Address</h3>
-        <fieldset class="mb-4">
+        <div class="mb-4">
             <legend class="fw-bold fs-5">Location</legend>
+            <div class="mb-3">
+                <label for="locName" class="form-label">Location Name:</label>
+                <input type="text" name="location" id="locName" class="form-control" required placeholder="Westdale On-Street Side Parking">
+            </div>
+
             <div class="mb-3">
                 <label for="address" class="form-label">Address:</label>
                 <input type="text" name="locations" id="address" class="form-control" required placeholder="28 York Blvd">
@@ -65,9 +76,9 @@
                 <label for="lot" class="form-label">Lot Name:</label>
                 <input type="text" name="location" id="lot" class="form-control" placeholder="7DU, 5">
             </div>
-        </fieldset>
+        </div>
     
-        <fieldset class="mb-4">
+        <div class="mb-4">
             <legend class="fw-bold fs-5">Status:</legend>
             <div class="mb-3">
                 <div class="form-check">
@@ -78,38 +89,48 @@
                     <input type="radio" name="status" id="statusOff" class="form-check-input">
                     <label for="statusOff" class="form-check-label">Offline</label>
                 </div>
+                <div class="form-check">
+                    <label for="ports" class="form-check-label">Number of ports:</label>
+                    <span id="portsValue"></span>
+                    <input type="range" name="status" id="ports" min="0" max="20" step="1" class="form-range">
+                </div>
+                <div class="corm-check">
+                    <select id="network" class="form-select">
+                        <option value="FLO">FLO</option>
+                        <option value="ChargePoint Network" selected>ChargePoint Network</option>
+                    </select>
+                </div>
             </div>
     
             <div class="mb-3">
-                <label for="time" class="form-label">Select (closest) time:</label>
-                <select name="time" id="time" class="form-select">
-                    <option value="9-6" selected>9 AM - 6 PM</option>
-                    <option value="24">24 hours</option>
-                    <option value="9-2">9 AM - 2 AM</option>
-                    <option value="9-9">9 AM - 9 PM</option>
+                <label for="hours" class="form-label">Select (closest) time:</label>
+                <select name="time" id="hours" class="form-select">
+                    <option value="9 AM - 6 PM" selected>9 AM - 6 PM</option>
+                    <option value="24 hours daily">24 hours daily</option>
+                    <option value="9 AM - 2 AM">9 AM - 2 AM</option>
+                    <option value="9 AM - 9 PM">9 AM - 9 PM</option>
                 </select>
             </div>
-        </fieldset>
+        </div>
     
         <div class="d-grid">
-            <input type="submit" value="Submit" class="btn btn-outline-primary">
+            <button class="btn btn-outline-success btn-sm" id="submitForm">Submit</button>
         </div>
-    </form>    
+    </div> 
 
     <footer class="bg-info-subtle text-center">
         <p class="text-info-emphasis text-center">&copy; Contains public sector Data made available under the City of
             Hamilton’s Open Data Licence<br>
-            Source: <a
-                href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">OpenHamilton</a>
+            Source: <a href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">
+                OpenHamilton</a>
         </p>
     </footer>
-
     <script>
         let map;
         let markers = [];
 
         function initMap() {
-            // Create a Google Map centered on Mohawk College fennell campus
+            // Create a Google Map centered on Mohawk 
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 43.2387, lng: -79.8881 },
                 zoom: 13,
@@ -119,6 +140,7 @@
             for (let i = 0; i < chargers.length; i++) {
                 let position = { lat: 0, lng: 0 };
 
+                let id = chargers[i].properties.OBJECTID;
                 position.lat = chargers[i].geometry.coordinates[1];
                 position.lng = chargers[i].geometry.coordinates[0];
                 let location = chargers[i].properties.LOCATION_NAME;
@@ -129,105 +151,60 @@
                 let hours = chargers[i].properties.HOURS;
                 let community = chargers[i].properties.COMMUNITY;
                 let status = chargers[i].properties.STATUS;
-                let iconSrc;
 
-                if (status === "Online") {
-                    iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon62.png";
-                } else {
-                    iconSrc = "https://maps.google.com/mapfiles/kml/pal4/icon15.png";
-                }
-
-                const icon = document.createElement('img');
-                icon.src = iconSrc;
-
-                const content = document.createElement('div');
-                content.innerHTML = `
-                    <div id="infoWindow" class="card shadow-md p-2 mb-4 bg-white rounded">
-                        <div class="card-body">
-                            <h3 class="card-title">${location}: ${lotName}</h3>
-                            <p class="card-text"><strong class="badge bg-primary">${status}</strong></p>
-                            <p class="card-text"><strong>Address:</strong> ${address}</p>
-                            <p class="card-text"><strong>Community:</strong> ${community}</p>
-                            <p class="card-text"><strong>Ev Network:</strong> ${network}</p>
-                            <p class="card-text"><strong>No. Charging Ports:</strong> ${ports}</p>
-                            <p class="card-text"><strong>Hours:</strong> ${hours}</p>
-                        </div>
-                    </div>
-                `;
-
-                const marker = new google.maps.marker.AdvancedMarkerElement({
-                    map: map,
-                    position: position,
-                    title: location,
-                    content: icon
-                });
-                const infoWindow = new google.maps.InfoWindow({
-                    content: content
-                });
-                marker.addListener('click', () => {
-                    infoWindow.open({
-                        anchor: marker,
-                        shouldFocus: false
-                    });
-                });
+                const marker = makeMarker(id, position, location, address, community, network, ports, status, hours, lotName);
 
                 marker.STATUS = chargers[i].properties.STATUS;
                 marker.COMMUNITY = chargers[i].properties.COMMUNITY;
                 marker.NETWORK = chargers[i].properties.EV_NETWORK;
                 marker.HOURS = chargers[i].properties.HOURS;
-
+                marker.ID = chargers[i].properties.OBJECTID;
 
                 markers.push(marker);
             }
         }
-        function filterOnline() {
-            for (let i = 0; i < markers.length; i++) {
-                const status = markers[i].STATUS;
-                if (status === "Offline") {
-                    markers[i].position = null;
-                }  
-            }
-            document.getElementById('appliedFilter').textContent += "Online only Filter Active |";
-        }
-        function filter24hrs() {
-            for (let i = 0; i < markers.length; i++) {
-                const hours = markers[i].HOURS;
-                if (hours !== "24 hours daily") 
-                    markers[i].position = null; 
+
+        function makeMarker(id, position, location, address, community, network, ports, status, hours, lotName = '', iconSrc = null) {
+            //Loads the default icons
+            if (iconSrc == null) {
+                iconSrc = (status === "Online") ? "https://maps.google.com/mapfiles/kml/pal4/icon62.png" : "https://maps.google.com/mapfiles/kml/pal4/icon15.png";
             }
             
-            document.getElementById('appliedFilter').innerText += "24 Hour Filter Active";
+            const icon = document.createElement('img');
+            icon.src = iconSrc;
+
+            const content = document.createElement('div');
+            content.innerHTML = `
+                <div id="infoWindow" class="card shadow-md p-2 mb-4 bg-white rounded">
+                    <div class="card-body">
+                        <h3 class="card-title">${id}:${location} ${lotName}</h3>
+                        <p class="card-text"><strong class="badge bg-primary">${status}</strong></p>
+                        <p class="card-text"><strong>Address:</strong> ${address}</p>
+                        <p class="card-text"><strong>Community:</strong> ${community}</p>
+                        <p class="card-text"><strong>Ev Network:</strong> ${network}</p>
+                        <p class="card-text"><strong>No. Charging Ports:</strong> ${ports}</p>
+                        <p class="card-text"><strong>Hours:</strong> ${hours}</p>
+                    </div>
+                </div>`;
+
+            const marker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: position,
+                title: location,
+                content: icon
+            });
+            const infoWindow = new google.maps.InfoWindow({
+                content: content
+            });
+            marker.addListener('click', () => {
+                infoWindow.open({
+                    anchor: marker,
+                    shouldFocus: false
+                });
+            });
+            return marker;
         }
-        function filterHamiltonOnly() {
-            for (let i = 0; i < markers.length; i++) {
-                const location = markers[i].COMMUNITY;
-                if (location !== "Hamilton") 
-                    markers[i].position = null;
-            }
-            document.getElementById('appliedFilter').innerText += "Hamilton Filter Active";
-        }
-        function filterNetworkFLO() {
-            for (let i = 0; i < markers.length; i++) {
-                const network = markers[i].NETWORK;
-                if (network !== "FLO") 
-                    markers[i].position = null;
-            }
-            document.getElementById('appliedFilter').innerText += "FLO Filter Active";
-        }
-        function displayALL() {
-            for (let i = 0; i < markers.length; i++) {
-                markers[i].position = {
-                    lat: chargers[i].geometry.coordinates[1],
-                    lng: chargers[i].geometry.coordinates[0]
-                }
-            }
-            document.getElementById('appliedFilter').innerText = "No Filters";
-        }
-        document.getElementById('online').addEventListener("click", filterOnline);
-        document.getElementById('hamilton').addEventListener('click', filterHamiltonOnly);
-        document.getElementById('24Hrs').addEventListener('click', filter24hrs);
-        document.getElementById('flo').addEventListener('click', filterNetworkFLO);
-        document.getElementById('all').addEventListener('click', displayALL);
+
         /**
          * Locate user
         */
@@ -250,9 +227,36 @@
             navigator.geolocation.getCurrentPosition(locateUser);
         });
 
-        
+        function userSetAddress() {
+            const address = document.getElementById('address').value;
+            const geocoder = new google.maps.Geocoder();
+            let position = { lat: null, lng: null };
+
+            geocoder.geocode({ 'address' : address}, function(results, status) {
+                if (status === 'OK') {
+                    position.lat = results[0].geometry.location.lat();
+                    position.lng = results[0].geometry.location.lng();
+
+                    const statusON = Boolean(document.getElementById('statusON').checked) ? 'Online' : 'Offline';
+                    const statusIcon = (statusON == true) ? "https://maps.google.com/mapfiles/kml/pal4/icon54.png" : "https://maps.google.com/mapfiles/kml/pal4/icon7.png";
+                    const ports = parseInt(document.getElementById('ports').value);
+                    const hours = document.getElementById('hours').value;
+                    const lot = document.getElementById('lot').value;
+                    const community = document.getElementById('community').value;
+                    const location = document.getElementById('locName').value;
+                    const network = document.getElementById('network').value;
 
 
+                    const marker = makeMarker(markers.length - 1, position, location, address, community, network, ports, statusON, hours, lot, statusIcon);
+
+                    markers.push(marker);
+                } else 
+                    window.alert('Geocode Failed: ' + status);        
+            });
+            
+        }
+        document.getElementById('submitForm').addEventListener("click", userSetAddress);
+    
     </script>
 </body>
 
