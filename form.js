@@ -1,11 +1,21 @@
+/**
+ * @author Timothy Mwangi
+ * StAuth10244: I Timothy Mwangi, 000937691 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else.
+ */
 
+/**
+ * Appends a span with some text as a badge. Tells the user which filter is selected
+ * @param {string} text Text to be displayed
+ */
 function appendBadge(text) {
     const span = document.createElement('span');
     span.className = "badge bg-secondary";
     span.innerHTML += text;
     document.getElementById('appliedFilter').appendChild(span);
 }
-
+/**
+ * Filters the markers for Online only
+ */
 function filterOnline() {
     for (let i = 0; i < markers.length; i++) {
         const status = markers[i].STATUS;
@@ -15,6 +25,9 @@ function filterOnline() {
     }
     appendBadge("Filter: Online");  
 }
+/**
+ * Filters the markers for 24hrs only
+ */
 function filter24hrs() {
     for (let i = 0; i < markers.length; i++) {
         const hours = markers[i].HOURS;
@@ -23,6 +36,9 @@ function filter24hrs() {
     }
     appendBadge("Filter: 24hrs");
 }
+/**
+ * Filters the markers for Hamilton only
+ */
 function filterHamiltonOnly() {
     for (let i = 0; i < markers.length; i++) {
         const location = markers[i].COMMUNITY;
@@ -31,6 +47,9 @@ function filterHamiltonOnly() {
     }
     appendBadge("Filter: Hamilton");
 }
+/**
+ * Filters the markers for network FLO only
+ */
 function filterNetworkFLO() {
     for (let i = 0; i < markers.length; i++) {
         const network = markers[i].NETWORK;
@@ -39,6 +58,9 @@ function filterNetworkFLO() {
     }
     appendBadge("Filer: FLO");
 }
+/**
+ * Displays all markers
+ */
 function displayALL() {
     document.getElementById('appliedFilter').innerHTML = "";
     for (let i = 0; i < markers.length; i++) {
@@ -49,6 +71,9 @@ function displayALL() {
     }
     appendBadge("Filer: Display");
 }
+/**
+ * Displays a range value for number of ports into a span
+ */
 function displayPorts() {
     const ports = document.getElementById('ports');
     document.getElementById('portsValue').innerText = ports.value;

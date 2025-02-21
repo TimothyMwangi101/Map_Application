@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-    <!--  Author: Timothy Mwangi - 000937691  -->
+
+    <!--StAuth10244: I Timothy Mwangi, 000937691 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else.  -->
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,11 +19,12 @@
     <!-- Bootstrap scripts to support many of the Bootstrap components -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
-    </script>
+        </script>
     <title>Geolocation</title>
     <script src="./api.js"></script>
     <script src="./chargers.js"></script>
     <script src="./form.js"></script>
+    <script src="./address.js"></script>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -58,14 +61,16 @@
             <legend class="fw-bold fs-5">Location</legend>
             <div class="mb-3">
                 <label for="locName" class="form-label">Location Name:</label>
-                <input type="text" name="location" id="locName" class="form-control" required placeholder="Westdale On-Street Side Parking">
+                <input type="text" name="location" id="locName" class="form-control" required
+                    placeholder="Westdale On-Street Side Parking">
             </div>
 
             <div class="mb-3">
                 <label for="address" class="form-label">Address:</label>
-                <input type="text" name="locations" id="address" class="form-control" required placeholder="28 York Blvd">
+                <input type="text" name="locations" id="address" class="form-control" required
+                    placeholder="28 York Blvd">
             </div>
-    
+
             <div class="mb-3">
                 <label for="community" class="form-label">Select the community:</label>
                 <select name="location" id="community" class="form-select">
@@ -76,13 +81,13 @@
                     <option value="Grimsby">Grimsby</option>
                 </select>
             </div>
-    
+
             <div class="mb-3">
                 <label for="lot" class="form-label">Lot Name:</label>
                 <input type="text" name="location" id="lot" class="form-control" placeholder="7DU, 5">
             </div>
         </div>
-    
+
         <div class="mb-4">
             <legend class="fw-bold fs-5">Status:</legend>
             <div class="mb-3">
@@ -106,7 +111,7 @@
                     </select>
                 </div>
             </div>
-    
+
             <div class="mb-3">
                 <label for="hours" class="form-label">Select (closest) time:</label>
                 <select name="time" id="hours" class="form-select">
@@ -117,37 +122,48 @@
                 </select>
             </div>
         </div>
-    
+
         <div class="d-grid">
             <button class="btn btn-outline-success btn-sm" id="submitForm">Submit</button>
         </div>
-    </div> 
+    </div>
 
     <footer class="text-center m-0 rounded bg-info-subtle container-fluid">
         <p>&copy; Contains public sector Data made available under the City of Hamilton’s Open Data Licence<br>
-            Source: <a href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">
+            Source: <a
+                href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">
                 OpenHamilton</a>
         </p>
     </footer>
     <script>
-        let map, origin = { lat: null, lng: null };
-        let markers = [];
+        let map;
+        const markers = [];
         let foundGeolocation = false;
-
+        //Contains map and user location information that will be used by address.js
+        const info = {
+            map: map,
+            origin: { lat: 0, lng: 0 }
+        };
+        /**
+         * Creates and Displays the map
+         * Displays all markers from the chargers.js
+        */
         function initMap() {
             // Create a Google Map centered on Mohawk 
             map = new google.maps.Map(document.getElementById("map"), {
                 center: { lat: 43.2387, lng: -79.8881 },
-                zoom: 13,
+                zoom: 12,
                 mapId: "5e6d3a99f6c7156c"
             });
+            info.map = map;
 
             for (let i = 0; i < chargers.length; i++) {
-                let position = { lat: 0, lng: 0 };
 
+                let position = {
+                    lat: chargers[i].geometry.coordinates[1],
+                    lng: chargers[i].geometry.coordinates[0]
+                };
                 let id = chargers[i].properties.OBJECTID;
-                position.lat = chargers[i].geometry.coordinates[1];
-                position.lng = chargers[i].geometry.coordinates[0];
                 let location = chargers[i].properties.LOCATION_NAME;
                 let lotName = chargers[i].properties.LOT_NAME ?? '';
                 let network = chargers[i].properties.EV_NETWORK;
@@ -158,41 +174,45 @@
                 let status = chargers[i].properties.STATUS;
 
                 const marker = makeMarker(id, position, location, address, community, network, ports, status, hours, lotName);
-
-                marker.LOCATION = location;
-                marker.STATUS = status;
-                marker.COMMUNITY = community;
-                marker.NETWORK = network;
-                marker.HOURS = hours;
-                marker.ID = id;
-                marker.ADDRESS = address;
-                marker.PORTS = ports;
-
-                markers.push(marker);
             }
         }
 
+        /**
+         * Creates a `marker` object and appends it to `markers`. The marker also has an `InfoWindow` with a click event listener
+         * @param {number} id Marker ID
+         * @param {{lat: number, lng: number}} position Lat and Lng of the marker  
+         * @param {string} location Location name of marker 
+         * @param {string} address Address of marker
+         * @param {string} community Community of marker
+         * @param {string} network EV network
+         * @param {number} ports Number of ports at marker
+         * @param {string} status Offline/Online marker
+         * @param {string} hours Hours the charger is active
+         * @param {string} [lotName] Lot name of charger
+         * @param {string} [iconSrc] URL for the image source
+         * @returns {AdvancedMarkerElement} A marker object with an info window
+         */
         function makeMarker(id, position, location, address, community, network, ports, status, hours, lotName = '', iconSrc = null) {
             //Loads the default icons
             if (iconSrc == null) {
                 iconSrc = (status === "Online") ? "https://maps.google.com/mapfiles/kml/pal4/icon62.png" : "https://maps.google.com/mapfiles/kml/pal4/icon15.png";
             }
-            
+
             const icon = document.createElement('img');
             icon.src = iconSrc;
 
             const content = document.createElement('div');
             content.className = "card shadow-md p-2 mb-4 bg-white rounded infoWindow";
             content.innerHTML = `
-                    <div class="card-body">
-                        <h3 class="card-title">${id}:${location} ${lotName}</h3>
-                        <p class="card-text"><strong class="badge bg-primary">${status}</strong></p>
-                        <p class="card-text"><strong>Address:</strong> ${address}</p>
-                        <p class="card-text"><strong>Community:</strong> ${community}</p>
-                        <p class="card-text"><strong>Ev Network:</strong> ${network}</p>
-                        <p class="card-text"><strong>No. Charging Ports:</strong> ${ports}</p>
-                        <p class="card-text"><strong>Hours:</strong> ${hours}</p>
-                    </div>`;
+            <div class="card-body">
+                <h3 class="card-title">${id}:${location} ${lotName}</h3>
+                <p class="card-text"><strong class="badge bg-primary">${status}</strong></p>
+                <p class="card-text"><strong>Address:</strong> ${address}</p>
+                <p class="card-text"><strong>Community:</strong> ${community}</p>
+                <p class="card-text"><strong>Ev Network:</strong> ${network}</p>
+                <p class="card-text"><strong>No. Charging Ports:</strong> ${ports}</p>
+                <p class="card-text"><strong>Hours:</strong> ${hours}</p>
+            </div>`;
 
             const marker = new google.maps.marker.AdvancedMarkerElement({
                 map: map,
@@ -209,132 +229,43 @@
                     shouldFocus: false
                 });
             });
+
+            marker.LOCATION = location;
+            marker.STATUS = status;
+            marker.COMMUNITY = community;
+            marker.NETWORK = network;
+            marker.HOURS = hours;
+            marker.ID = id;
+            marker.ADDRESS = address;
+            marker.PORTS = ports;
+            markers.push(marker);
+
             return marker;
         }
-
+        /**
+         * Displays user marker
+        */
         function locateUser(position) {
             const iconSrc = "https://maps.google.com/mapfiles/kml/paddle/grn-stars.png";
             const icon = document.createElement('img');
             icon.src = iconSrc;
             const location = new google.maps.marker.AdvancedMarkerElement({
                 map: map,
-                position: { 
-                    lat: position.coords.latitude, 
+                position: {
+                    lat: position.coords.latitude,
                     lng: position.coords.longitude
                 },
                 title: "You are here",
                 content: icon
             });
-            
-            origin.lat = position.coords.latitude;
-            origin.lng = position.coords.longitude;
+
+            info.origin.lat = position.coords.latitude;
+            info.origin.lng = position.coords.longitude;
+
             foundGeolocation = true;
-            displayMarkers();
+            displayMarkers(markers);
         }
 
-        function userSetAddress() {
-            const address = document.getElementById('address').value;
-            const geocoder = new google.maps.Geocoder();
-            let position = { lat: null, lng: null };
-
-            geocoder.geocode({ 'address' : address}, function(results, status) {
-                if (status === 'OK') {
-                    position.lat = results[0].geometry.location.lat();
-                    position.lng = results[0].geometry.location.lng();
-
-                    const statusON = Boolean(document.getElementById('statusON').checked) ? 'Online' : 'Offline';
-                    const statusIcon = (statusON == true) ? "https://maps.google.com/mapfiles/kml/pal4/icon54.png" : "https://maps.google.com/mapfiles/kml/pal4/icon7.png";
-                    const ports = parseInt(document.getElementById('ports').value);
-                    const hours = document.getElementById('hours').value;
-                    const lot = document.getElementById('lot').value;
-                    const community = document.getElementById('community').value;
-                    const location = document.getElementById('locName').value;
-                    const network = document.getElementById('network').value;
-
-                    const marker = makeMarker(markers.length - 1, position, location, address, community, network, ports, statusON, hours, lot, statusIcon);
-
-                    marker.LOCATION = location;
-                    marker.STATUS = status;
-                    marker.COMMUNITY = community;
-                    marker.NETWORK = network;
-                    marker.HOURS = hours;
-                    marker.ID = markers.length - 1;
-                    marker.ADDRESS = address;
-                    marker.PORTS = ports;
-
-                    markers.push(marker);
-                    displayMarkers();
-                } else 
-                    window.alert('Geocode Failed');        
-            });
-        }
-        function displayMarkers() {
-            if (foundGeolocation) {
-                for (let i = 0; i < markers.length; i++) {
-                    const marker = markers[i];
-                    const accordionItem = createAccordionItem(marker);
-                    document.getElementById('accordion').appendChild(accordionItem);
-                }
-            }
-        }
-        function createAccordionItem(marker) {
-            
-            const item = document.createElement('div');
-            item.className = "accordion-item";
-            const header = document.createElement('h2');
-            header.className = "accordion-header";
-            const button = document.createElement('button');
-            button.className = "accordion-button collapsed fw-bold";
-            button.textContent = marker.LOCATION;
-            button.type = "button";
-            button.setAttribute('data-bs-toggle', 'collapse');
-            button.setAttribute('data-bs-target', `#address${marker.ID}`)
-            button.ariaExpanded = "true";
-
-            const destination = `${marker.ADDRESS}, ${marker.COMMUNITY}`;
-            // console.log(typeof(destination));
-
-            const container = document.createElement('div');
-            container.className = "accordion-collapse collapse";
-            container.id = `address${marker.ID}`;
-            container.innerHTML = `
-                <div class="accordion-body">
-                    <h3>${marker.ID}: ${marker.LOCATION}</h3>
-                    <p><strong class="badge bg-primary">${marker.STATUS}</strong></p>
-                    <p><strong>Address:</strong> ${marker.ADDRESS}</p>
-                    <p><strong>Community:</strong> ${marker.COMMUNITY}</p>
-                    <p><strong>Ev Network:</strong> ${marker.NETWORK}</p>
-                    <p><strong>No. Charging Ports:</strong> ${marker.PORTS}</p>
-                    <p><strong>Hours:</strong> ${marker.HOURS}</p>
-                    <button id="button${marker.ID}" class="btn btn-secondary btn-sm" onclick="calculateRoute('${destination}')">Direction</button>
-                </div>`;
-            header.appendChild(button);
-            item.appendChild(header);
-            item.appendChild(container);
-            return item;
-        }
-
-        function calculateRoute(destination, travelMode = 'DRIVING') {
-            //casing was wrong
-            const directionsService = new google.maps.DirectionsService();
-            const directionsRenderer = new google.maps.DirectionsRenderer({
-                map: map
-            });
-
-            request = {
-                origin: origin,
-                destination: destination,
-                travelMode: travelMode
-            }
-
-            directionsService.route(request, function(result, status) {
-                if(status == "OK") {
-                    directionsRenderer.setDirections(result);
-                }
-            });
-        }
-
-  
         //Adding onclicks
         document.getElementById('online').addEventListener("click", filterOnline);
         document.getElementById('hamilton').addEventListener('click', filterHamiltonOnly);
@@ -344,11 +275,10 @@
         document.getElementById('ports').addEventListener('click', displayPorts);
         document.getElementById('submitForm').addEventListener("click", userSetAddress);
         //Calls locate user func and passes a position obj
-        document.getElementById('userLocation').addEventListener("click", function() {
+        document.getElementById('userLocation').addEventListener("click", function () {
             navigator.geolocation.getCurrentPosition(locateUser);
         });
     </script>
-   
 </body>
 
 </html>

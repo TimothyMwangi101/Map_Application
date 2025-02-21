@@ -1,12 +1,13 @@
 /**
- * @author Timothy Mwangi - 000937691
+ * @author Timothy Mwangi
+ * StAuth10244: I Timothy Mwangi, 000937691 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else.
  */
 
 /**
  * Holds all functions needed to get the map API
  */
 window.addEventListener('DOMContentLoaded', () => {
-    
+
     /**
      * Fetches the API key from API KEY.json
      * @see {@link https://github.com/TimothyMwangi101/Map_Application/blob/main/REAMDME.md}
@@ -14,7 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
      */
     const fetchAPIKEY = async () => {
         try {
-            const response = await fetch('./API KEY.json');   
+            const response = await fetch('./API KEY.json');
             if (!response.ok) {
                 throw new Error(`Error Fetching API KEY: ${response.status}`);
             }
@@ -45,7 +46,7 @@ window.addEventListener('DOMContentLoaded', () => {
             //console.log(script) //Debugging
         });
     }
-    
+
     /**
      * Main method in this event listener. 
      */
@@ -53,8 +54,8 @@ window.addEventListener('DOMContentLoaded', () => {
         try {
             //🤡"'await' has no effect on the type of this expression" 🤡
             await createAPIScriptTag(await fetchAPIKEY());
-            
-        }catch(error) {
+
+        } catch (error) {
             console.error("Error:" + error);
             return;
         }
