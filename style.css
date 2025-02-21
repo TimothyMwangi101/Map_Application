@@ -3,7 +3,7 @@
     font-size: medium;
 }
 
-#map, #filters {
+#map {
     width: 90%;
     max-width: 1300px;
     margin: 0 auto;
@@ -45,23 +45,12 @@
     padding: 0.5em 0.75em;
 }
 
-#addAddress {
+#addAddress, #directions, #filters {
     min-width: 450px;
     max-width: 700px;
     width: 90%;
     margin: 0 auto; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.74);
-}
-
-#addAddress fieldset {
-    border: 1px solid #ddd; 
-    padding: 1rem; 
-    border-radius: 8px; 
-}
-
-#addAddress legend {
-    padding: 0 0.5rem; 
-    color: #333; 
 }
 
 #addAddress .form-label {

@@ -22,7 +22,6 @@
     <script src="./api.js"></script>
     <script src="./chargers.js"></script>
     <script src="./form.js"></script>
-    <script src="./address.js"></script>
     <link rel="stylesheet" href="./style.css">
 </head>
 
@@ -44,7 +43,10 @@
 
     <div id="directions" class="mb-3 p-4 border rounded bg-light container-fluid">
         <h3 class="text-center fw-bolder">Get Directions to wherever you are going</h3>
-        <button type="button" id="userLocation" class="btn btn-outline-success btn-sm">Geolocate</button>
+        <div class="d-inline">
+            <h4 class="d-inline">Tell me where you are: &nbsp;</h4>
+            <button type="button" id="userLocation" class="btn btn-outline-success btn-sm d-inline">Geolocate</button>
+        </div>
         <div class="accordion" id="accordion">
 
         </div>
@@ -259,6 +261,7 @@
                     marker.PORTS = ports;
 
                     markers.push(marker);
+                    displayMarkers();
                 } else 
                     window.alert('Geocode Failed: ' + status);        
             });
@@ -279,11 +282,11 @@
             const header = document.createElement('h2');
             header.className = "accordion-header";
             const button = document.createElement('button');
-            button.className = "accordion-button collapsed";
+            button.className = "accordion-button collapsed fw-bold";
             button.textContent = marker.LOCATION;
             button.type = "button";
-            button.setAttribute('data-bs-toggle', 'show');
-            button.setAttribute('data-bs-target', `address${marker.ID}`)
+            button.setAttribute('data-bs-toggle', 'collapse');
+            button.setAttribute('data-bs-target', `#address${marker.ID}`)
             button.ariaExpanded = "true";
 
             console.log(button);
@@ -293,7 +296,7 @@
             container.id = `address${marker.ID}`;
             container.innerHTML = `
                 <div class="accordion-body">
-                    <h3>${marker.ID}:${marker.LOCATION}</h3>
+                    <h3>${marker.ID}: ${marker.LOCATION}</h3>
                     <p><strong class="badge bg-primary">${marker.STATUS}</strong></p>
                     <p><strong>Address:</strong> ${marker.ADDRESS}</p>
                     <p><strong>Community:</strong> ${marker.COMMUNITY}</p>
@@ -320,7 +323,6 @@
         document.getElementById('userLocation').addEventListener("click", function() {
             navigator.geolocation.getCurrentPosition(locateUser);
         });
-        // displayMarkers();
     </script>
    
 </body>
