@@ -6,18 +6,10 @@
 #map {
     width: 90%;
     max-width: 1300px;
+    height: 70vh;
     margin: 0 auto;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.74);
     border-radius: 8px;
-}
-@media (max-width: 768px) {
-    #map {
-        height: 50vh;
-        width: 95%;
-    }
-}
-#map {
-    height: 90vh;
 }
 
 #filters .btn {
@@ -45,9 +37,8 @@
     padding: 0.5em 0.75em;
 }
 
-#addAddress, #directions, #filters {
-    min-width: 450px;
-    max-width: 700px;
+#addAddress, #directions, #filters, footer {
+    max-width: 50em;
     width: 90%;
     margin: 0 auto; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.74);
@@ -60,8 +51,27 @@
 #addAddress .btn {
     margin-top: 1rem; 
 }
-/* Style the range input container */
+
 #ports {
-    width: 100%; 
+    width: 95%; 
     margin: 10px 0; 
+}
+
+@media (max-width: 450px) {
+    input, legend {
+        font-size: medium;
+    }
+    h1, h2, h3, h4 {
+        font-size: large;
+    }
+
+    #addAddress, #directions, #filters, footer {
+        width: 90%;
+        margin: 0 auto; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.74);
+    }
+
+    .form-label {
+        font-size: medium;
+    }
 }

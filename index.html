@@ -29,7 +29,7 @@
     <h1 class="alert-info text-center">EV Charging Stations Location</h1>
     <div id="map"></div>
     <span id="details"></span>
-    <div id="filters" class="mb-4 p-3 border rounded bg-light">
+    <div id="filters" class="mb-4 mt-4 p-3 rounded bg-light container-fluid">
         <h3 class="text-center fw-bolder">Apply some filters to narrow your search</h3>
         <div class="d-flex flex-wrap gap-2 mb-3">
             <button type="button" id="online" class="btn btn-outline-primary btn-sm">Online only</button>
@@ -41,7 +41,7 @@
         <div id="appliedFilter"></div>
     </div>
 
-    <div id="directions" class="mb-3 p-4 border rounded bg-light container-fluid">
+    <div id="directions" class="mb-3 p-4 rounded bg-light container-fluid">
         <h3 class="text-center fw-bolder">Get Directions to wherever you are going</h3>
         <div class="d-inline">
             <h4 class="d-inline">Tell me where you are: &nbsp;</h4>
@@ -52,7 +52,7 @@
         </div>
     </div>
 
-    <div class="mb-3 p-4 border rounded bg-light container-fluid" id="addAddress" autocomplete="on">
+    <div class="mb-3 p-4 rounded bg-light container-fluid" id="addAddress" autocomplete="on">
         <h3 class="text-center fw-bolder">Add an Address</h3>
         <div class="mb-4">
             <legend class="fw-bold fs-5">Location</legend>
@@ -123,15 +123,14 @@
         </div>
     </div> 
 
-    <footer class="bg-info-subtle text-center">
-        <p class="text-info-emphasis text-center">&copy; Contains public sector Data made available under the City of
-            Hamilton’s Open Data Licence<br>
+    <footer class="text-center m-0 rounded bg-info-subtle container-fluid">
+        <p>&copy; Contains public sector Data made available under the City of Hamilton’s Open Data Licence<br>
             Source: <a href="https://open.hamilton.ca/datasets/SpatialSolutions::electric-vehicle-charging-stations/about">
                 OpenHamilton</a>
         </p>
     </footer>
     <script>
-        let map;
+        let map, origin = { lat: null, lng: null };
         let markers = [];
         let foundGeolocation = false;
 
@@ -226,6 +225,9 @@
                 title: "You are here",
                 content: icon
             });
+            
+            origin.lat = position.coords.latitude;
+            origin.lng = position.coords.longitude;
             foundGeolocation = true;
             displayMarkers();
         }
@@ -263,7 +265,7 @@
                     markers.push(marker);
                     displayMarkers();
                 } else 
-                    window.alert('Geocode Failed: ' + status);        
+                    window.alert('Geocode Failed');        
             });
         }
         function displayMarkers() {
@@ -289,7 +291,8 @@
             button.setAttribute('data-bs-target', `#address${marker.ID}`)
             button.ariaExpanded = "true";
 
-            console.log(button);
+            const destination = `${marker.ADDRESS}, ${marker.COMMUNITY}`;
+            // console.log(typeof(destination));
 
             const container = document.createElement('div');
             container.className = "accordion-collapse collapse";
@@ -303,11 +306,32 @@
                     <p><strong>Ev Network:</strong> ${marker.NETWORK}</p>
                     <p><strong>No. Charging Ports:</strong> ${marker.PORTS}</p>
                     <p><strong>Hours:</strong> ${marker.HOURS}</p>
+                    <button id="button${marker.ID}" class="btn btn-secondary btn-sm" onclick="calculateRoute('${destination}')">Direction</button>
                 </div>`;
             header.appendChild(button);
             item.appendChild(header);
             item.appendChild(container);
             return item;
+        }
+
+        function calculateRoute(destination, travelMode = 'DRIVING') {
+            //casing was wrong
+            const directionsService = new google.maps.DirectionsService();
+            const directionsRenderer = new google.maps.DirectionsRenderer({
+                map: map
+            });
+
+            request = {
+                origin: origin,
+                destination: destination,
+                travelMode: travelMode
+            }
+
+            directionsService.route(request, function(result, status) {
+                if(status == "OK") {
+                    directionsRenderer.setDirections(result);
+                }
+            });
         }
 
   
