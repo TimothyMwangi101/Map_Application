@@ -1,6 +1,5 @@
 /**
  * @author Timothy Mwangi
- * StAuth10244: I Timothy Mwangi, 000937691 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else.
  */
 
 /**
@@ -27,11 +26,7 @@ function userSetAddress() {
             const location = document.getElementById('locName').value;
             const network = document.getElementById('network').value;
 
-
-
-            console.log(markers);
             const marker = makeMarker(markers.length + 1, position, location, address, community, network, ports, statusText, hours, lot, statusIcon);
-            console.log(markers);
 
             if (foundGeolocation)
                 displayMarkers(markers);
@@ -43,7 +38,6 @@ function userSetAddress() {
  * For each marker, it creates an accordion item and appends it to the DOM
  * @param {AdvanceMarkerElement[]} markers The array of markers
  */
-
 function displayMarkers(markers) {
     document.getElementById('accordion').innerHTML = "";
     for (let i = 0; i < markers.length; i++) {
